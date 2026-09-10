@@ -1,0 +1,212 @@
+role_id: fullstack_engineer
+title: Mid-level Full-Stack Engineer
+company: Northloop
+team: Product Engineering
+level: Mid (IC3)
+location: Remote (4-hour overlap with US Eastern or CET)
+compensation_band: "USD 95k–130k + early equity"
+must_work_auth_note: Do not auto-reject on missing work-auth; request info instead.
+
+summary: >
+  Northloop is a 22-person B2B SaaS company. This role owns features across
+  a Python API and a React web app, ships weekly, and collaborates with one
+  designer and two PMs. We need someone who has done this kind of work in
+  production, not a tutorial-only profile.
+
+criteria:
+  - id: years_experience
+    label: 3+ years professional software engineering
+    must_have: true
+    weight: 1.2
+    indicators:
+      - "years of experience"
+      - "years experience"
+      - "years as a"
+      - "software engineer"
+      - "full-stack"
+      - "full stack"
+      - "backend engineer"
+      - "frontend engineer"
+    negative_indicators:
+      - "bootcamp graduate looking for first role"
+      - "career switcher with no professional"
+      - "internship only"
+
+  - id: python_backend
+    label: Production Python backend experience
+    must_have: true
+    weight: 1.4
+    indicators:
+      - python
+      - FastAPI
+      - Django
+      - Flask
+      - pytest
+      - Celery
+      - pandas
+    negative_indicators:
+      - "learning python"
+      - "python tutorial"
+      - "no backend"
+
+  - id: react_frontend
+    label: Production React (or equivalent SPA) experience
+    must_have: true
+    weight: 1.3
+    indicators:
+      - React
+      - Next.js
+      - TypeScript
+      - Redux
+      - "frontend"
+      - "front-end"
+      - Vue
+      - Svelte
+    negative_indicators:
+      - jQuery only
+      - "no frontend"
+      - "backend only"
+
+  - id: data_stores
+    label: Relational data stores (PostgreSQL or equivalent)
+    must_have: false
+    weight: 0.9
+    indicators:
+      - PostgreSQL
+      - Postgres
+      - MySQL
+      - SQL
+      - Prisma
+      - SQLAlchemy
+      - migrations
+    negative_indicators: []
+
+  - id: testing_quality
+    label: Testing or quality practices
+    must_have: false
+    weight: 0.8
+    indicators:
+      - pytest
+      - jest
+      - cypress
+      - playwright
+      - unit test
+      - integration test
+      - TDD
+      - CI
+    negative_indicators: []
+
+  - id: cloud_devops
+    label: Cloud or production operations familiarity
+    must_have: false
+    weight: 0.7
+    indicators:
+      - AWS
+      - GCP
+      - Azure
+      - Docker
+      - Kubernetes
+      - CI/CD
+      - GitHub Actions
+      - Terraform
+    negative_indicators: []
+
+  - id: domain_saas
+    label: B2B SaaS or similar product domain
+    must_have: false
+    weight: 0.6
+    indicators:
+      - SaaS
+      - B2B
+      - marketplace
+      - dashboard
+      - billing
+      - multi-tenant
+      - "product team"
+    negative_indicators: []
+
+  - id: collaboration
+    label: Evidence of collaboration with PMs/designers/review
+    must_have: false
+    weight: 0.7
+    indicators:
+      - pull request
+      - code review
+      - designer
+      - product manager
+      - stakeholder
+      - agile
+      - sprint
+      - mentored
+    negative_indicators: []
+
+knockouts:
+  - id: hostile_conduct
+    label: Hostile, discriminatory, or abusive conduct in packet
+    action: reject_with_reason
+    indicators:
+      - "rude to recruiter"
+      - "hung up"
+      - "sexist"
+      - "racist"
+      - "berated"
+      - "threatened"
+      - "refused to speak with"
+
+  - id: wrong_discipline
+    label: Clearly a different discipline with no transferable product-engineering evidence
+    action: reject_with_reason
+    indicators:
+      - "iOS only"
+      - "Swift only"
+      - "Android only"
+      - "pure data scientist"
+      - "no web experience"
+      - "embedded only"
+
+risk_flags:
+  - id: job_hopping
+    label: Very short tenures without explanation
+    indicators:
+      - "3 months"
+      - "2 months"
+      - "contract ended in"
+  - id: inflated_claims
+    label: Grand claims with no concrete artifacts
+    indicators:
+      - "10x"
+      - "ninja"
+      - "guru"
+      - "expert in all"
+      - "world-class"
+  - id: timezone_conflict
+    label: Timezone or availability may not overlap
+    indicators:
+      - "GMT+8"
+      - "PST only nights"
+      - "no overlap"
+      - "asynchronous only"
+      - "Singapore"
+      - "Sydney"
+
+action_playbook:
+  advance_to_screen:
+    when: All must-haves met with evidence; no knockout.
+    human: Approve screen invite before anything is sent.
+  hold_for_specific_interview:
+    when: Must-haves mostly met but one interviewable gap remains.
+    human: Confirm which gap to probe.
+  request_missing_info:
+    when: Packet too thin or a must-have is unknown rather than failed.
+    human: Approve the ask-back email.
+  reject_with_reason:
+    when: A must-have clearly fails or a knockout fires.
+    human: Approve rejection; do not auto-send.
+  escalate_to_hiring_manager:
+    when: Referral, executive, legal/HR sensitivity, or mixed senior-level signal.
+    human: Required. System must not auto-close.
+
+draft_email_policy: >
+  Drafts are suggestions only. Never send email from this tool. Address the
+  candidate by name if present. Do not mention other candidates. Do not invent
+  interview times. Do not mention compensation unless the packet already did.

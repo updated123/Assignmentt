@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Packet Review OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <small>Northloop hiring desk</small>
+      Packet Review OS
+    </div>
+    <nav>
+      <a href="/">New review</a>
+      <a href="/history">History</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    <section class="hero">
+      <h2>Turn a messy candidate packet into a scorecard decision a human can approve.</h2>
+      <p>Paste a resume, recruiter notes, or upload a PDF. The system quotes evidence, applies the role policy, and stops before any email is sent.</p>
+    </section>
+    {% if error %}<div class="banner">{{ error }}</div>{% endif %}
+    <form class="panel grid" action="/review" method="post" enctype="multipart/form-data">
+      <div>
+        <label for="packet_text">Packet text</label>
+        <textarea id="packet_text" name="packet_text" placeholder="Paste the resume, LinkedIn dump, forwarding email, or all of them mixed together."></textarea>
+        <label for="pdf">Or upload a resume PDF</label>
+        <input id="pdf" type="file" name="pdf" accept="application/pdf">
+        <label for="recruiter_notes">Recruiter / referral notes</label>
+        <textarea id="recruiter_notes" name="recruiter_notes" style="min-height:90px" placeholder="Optional. Referrals, screening notes, or “CEO asked us to look.”"></textarea>
+      </div>
+      <div>
+        <label for="role_id">Role scorecard</label>
+        <select id="role_id" name="role_id">
+          {% for role in roles %}
+          <option value="{{ role.id }}">{{ role.title }} — {{ role.company }}</option>
+          {% endfor %}
+        </select>
+        <div class="row">
+          <div>
+            <label for="candidate_name">Candidate name</label>
+            <input id="candidate_name" type="text" name="candidate_name" placeholder="If known">
+          </div>
+          <div>
+            <label for="job_url">Job URL (optional)</label>
+            <input id="job_url" type="url" name="job_url" placeholder="https://…">
+          </div>
+        </div>
+        <p class="mode">Engine: {% if llm_on %}LLM judge + grounded quotes{% else %}grounded extractive (no API key){% endif %}. Human approval is always required.</p>
+        <div class="actions">
+          <button type="submit">Run scorecard review</button>
+        </div>
+        <p class="hint">Packets stay on this machine. Emails are never sent. Open <code>samples/packets/</code> for example cases.</p>
+      </div>
+    </form>
+    <p class="footer">Operator runbook: docs/RUNBOOK.md · Three-step setup is in the README.</p>
+  </main>
+</body>
+</html>

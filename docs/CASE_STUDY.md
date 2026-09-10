@@ -1,0 +1,273 @@
+# Case study — Packet Review OS
+
+**Artifact:** a local web + CLI system a non-developer hiring manager can run in
+three steps
+**Sprint:** five days, plus a hardening pass (v1.1) described in §7
+**One-line result:** a scorecard-grounded review system produced **zero false
+advances** across 12 labelled packets and grounded **100% of its scores in a
+verbatim quote**, where a policy-free reviewer on the same packets advanced five
+candidates it should not have — including one whose packet contains abusive
+conduct.
+
+---
+
+## 1. User and problem
+
+**User (proxy, explicitly stated as such):** Maya Chen, Head of People at
+**Northloop**, a fictional 22-person B2B SaaS company. She owns one mid-level
+full-stack requisition at a time and receives **8–15 candidate packets a week**.
+
+**Job to be done:** when a packet lands — email forward, PDF, LinkedIn dump,
+referral note — produce a **criteria-based decision with evidence** and a **safe
+next action** she can defend to the founder.
+
+**Assumptions, stated because they matter:**
+
+- No access to a real ATS or real applicant PII, so all 12 packets are synthetic
+  and labelled in `samples/packets/`.
+- Maya is a proxy, not a paying customer. The pain is drawn from common
+  small-company hiring practice: inconsistent skimming, pasting into a chat tool
+  with no scorecard, and rework when someone asks "why?".
+- Maya is not a developer. Setup must be three steps. She will not run a notebook.
+- **Timings in this document are self-measured by the system's author on
+  synthetic packets, n=3.** They are indicative, not observed user research.
+
+**Evidence of pain (observational and proxy-timed):**
+
+| Dimension | Finding |
+|---|---|
+| Frequency | ~10 packets/week, every week the role is open |
+| Time | 11–18 minutes per packet to skim, paste, and write a verdict |
+| Rework | The founder's "why?" cannot be answered with evidence; the PDF gets reopened |
+| Errors | Conduct notes and wrong-discipline packets hide easily in a messy forward, and naive prompting still reports "strong skills" |
+
+## 2. Existing workflow and the bottleneck
+
+| Step | Before |
+|---|---|
+| Trigger | Recruiter or founder forwards a packet |
+| Input | PDF + email thread + memory of the JD |
+| Judgment | Gut feel, plus an optional chat-tool paste |
+| Tools | Gmail, a PDF viewer, a chat tool, Slack |
+| Approval | Maya, sometimes the founder |
+| Output | A Slack message: "let's screen" — or silence |
+| Exception | Incomplete packets stall in the inbox indefinitely |
+
+**The bottleneck is not writing English. It is ungrounded judgment.** The model —
+or Maya's memory — asserts skills the packet does not contain, and there is no
+policy for referrals, knockouts, or missing information. Two distinct failures
+sit underneath:
+
+1. **No grounding.** A claim is made with no pointer to the text that supports it.
+2. **No policy.** "Looks broadly fine" collapses into "advance", because nothing
+   forces a different action for a conduct note, a founder referral, or a packet
+   that is simply too thin to judge.
+
+Those two are exactly what the system adds, and exactly what the baseline in §5
+is built to lack.
+
+## 3. Scope decisions and non-goals
+
+**In scope (v1):** one role scorecard; paste + PDF + optional job URL; structured
+review with grounded quotes; action policy in code; a draft that is never sent;
+a local audit log; human approve/send-back; 12 labelled cases plus fixtures.
+
+**Explicit non-goals:**
+
+- Greenhouse/Lever/Ashby write-back
+- Outbound email or calendar integration
+- Multi-tenant auth or cloud hosting
+- OCR for scanned PDFs
+- Fairness or adverse-impact statistics (12 synthetic packets cannot support one)
+- Replacing Maya's legal or HR judgment
+
+**Success criteria, set on day one:**
+
+1. Zero false advances on cases gold-marked must-not-advance
+2. No case outside its allowed action set
+3. Under five minutes per packet including approval
+4. A non-developer completes setup from the README alone
+
+All four hold. Criterion 3 is the weakest evidence (self-measured, n=3).
+
+## 4. Architecture and the major trade-off
+
+Full detail in [ARCHITECTURE.md](ARCHITECTURE.md). The decision everything else
+follows from:
+
+> **The model proposes; code decides.**
+
+A language model — when a key is configured — may propose criterion scores and
+supply quotes. It never chooses the action. That lives in `policy.py`, against
+thresholds in `config/app.yaml`, where it can be read, unit-tested, and argued
+with in a hiring meeting.
+
+**What this costs:** the system feels less magical, cannot exercise judgment the
+code lacks, and its extractive scorer misses skills phrased with synonyms absent
+from the YAML. **What it buys:** the behaviour is evaluable, reproducible with no
+API key at $0, and a model outage degrades the review instead of stopping it.
+`LX06` in the evaluation is the mechanical proof — when a stubbed model
+recommends advancing a candidate with a conduct knockout, the answer is still
+`reject_with_reason`.
+
+Two integrations beyond the optional model: **PDF text extraction** (pypdf) and
+**job-URL fetch** (httpx, SSRF-guarded). Storage is SQLite in WAL mode.
+Interface is one server-rendered form, plus a CLI and a JSON endpoint.
+
+## 5. Delegated to AI vs retained by the human
+
+| The system does | Maya decides |
+|---|---|
+| Normalise the packet, extract quotes, score criteria, fire knockouts | Whether the quote is the *right* evidence |
+| Apply must-have, referral, timezone and conduct policy | Founder politics, compensation, "we'll take the risk" |
+| Draft the screen / ask-back / reject email | Whether to send it, and in what tone |
+| Log the run with an audit trail | Approve, or send back with a note |
+
+`draft_email.send_allowed` is `False` in every code path, and no mail library is
+installed. The gate is structural, not a prompt instruction.
+
+## 6. What broke, and what changed
+
+Seven defects worth naming. Each is now a regression test, so the fix is fenced
+rather than remembered.
+
+**1. Negated keywords scored as skills.** The indicator `frontend` matched inside
+"No frontend SPA work." *Fix:* negative indicators take priority on must-haves.
+*Fence:* TC02.
+
+**2. A CEO-referred VP auto-advanced.** Escalation only fired when the overall
+score was low. *Fix:* any founder, board or internal referral escalates,
+regardless of score. *Fence:* TC05, TC08.
+
+**3. A conduct note was lost behind strong Python.** *Fix:* a hostile-conduct
+knockout short-circuits to reject before scoring matters. *Fence:* TC11, LX06.
+
+**4. The evaluation was flattering itself.** The v1.0 report headlined **12/12
+passed** while TC02 returned an action that was not the expected one — legal
+under a pass rule that only asked "is it inside the allowed set?", but that rule
+rewards widening the set. *Fix:* three outcomes — `exact`, `alternate`, `fail` —
+with the headline quoting exact matches, plus a test asserting no gold case
+allows more than two actions. The honest number is **11/12 exact, 1 alternate**.
+
+**5. The baseline had been rigged to lose.** It handed non-must-have criteria a
+free score of 2 regardless of evidence, advanced anything scoring ≥ 0.4, and the
+harness hard-coded its grounding check to `False`. It scored 1/12. **That result
+is retracted.** *Fix:* a fair opponent that scores from the same indicator lists
+with no generosity hack, decides at the *system's own* thresholds, and is not
+scored on grounding it cannot produce by construction. It now gets 3/12 exact —
+and the tests assert it must win some cases, because a baseline that never wins
+is evidence of rigging rather than of system quality.
+
+**6. Stored reviews leaked contact details.** The README promised redaction, but
+only one column was redacted while `result_json` carried the candidate's email
+and phone inside the evidence quotes, the draft body and the log lines. *Fix:*
+recursive redaction of every free-text field before the row is written. Names are
+retained deliberately.
+
+**7. A human's approval could be silently discarded.** `INSERT OR REPLACE` reset
+`approved` to NULL on any re-save of the same run. *Fix:* an upsert that preserves
+the decision, and an immediate transaction so the read-modify-write is atomic.
+
+## 7. The hardening pass (v1.1)
+
+The five-day build produced something that worked on the happy path. A separate
+review pass asked a different question — *what breaks in production?* — and found
+that several things already had:
+
+- **Server-side request forgery.** The job-URL field fetched anything the operator
+  pasted, following redirects. `http://169.254.169.254/latest/meta-data/` or the
+  app's own `http://127.0.0.1:8000/history` were both reachable. *Fixed* with a
+  default-deny address policy that re-validates every redirect hop, plus a 2 MB
+  read cap and a content-type check. Two security fixtures and 22 unit tests fence it.
+- **Event-loop blocking.** `/api/review` was `async` but called a synchronous
+  review that can sit inside a 45-second model call, stalling every other request.
+  *Fixed* by handing the work to a thread.
+- **Connection leak and lock contention.** Every write opened a SQLite connection
+  that was committed but never closed. *Fixed*, plus WAL and a busy timeout so the
+  CLI and the web app can run at once.
+- **Configuration that failed late.** A typo in a role scorecard surfaced as a
+  crash deep in the scorer on the first real packet. *Fixed* with validated
+  pydantic models, a `check` command, and a server that refuses to start on a
+  broken scorecard. A file whose internal `role_id` disagrees with its filename is
+  now an explicit error — copying a YAML and forgetting to edit it is the likely slip.
+- **Zero tests.** There were none. There are now **216, at 93% statement
+  coverage**, and CI runs lint, the config check, the suite with an 85% floor, and
+  the evaluation gate on Python 3.11 and 3.12.
+- **A bug the tests found.** When the model omitted `evidence_quote`, the merge
+  blanked the grounded extractive quote and then capped the score for having
+  none — a partial reply actively destroyed evidence. Found by a test written to
+  check something else.
+
+## 8. Results
+
+Extractive engine, no API key, 12 gold cases. Full tables in
+[evaluation/results/LATEST.md](../evaluation/results/LATEST.md).
+
+| Metric | System | Baseline (no policy, no grounding) |
+|---|---|---|
+| Exact match on the gold action | **11/12** | 3/12 |
+| Defensible alternate | 1 | 0 |
+| Outside the allowed set | **0** | 9 |
+| Cases passing every invariant | **12/12** | 3/12 |
+| False advances on must-not-advance | **0** | 5 |
+| Scores backed by a verbatim quote | **100%** (68/68) | not available |
+| Latency p50 / p95 | 1 ms / 20 ms | 1 ms / 1 ms |
+| Cost per review | **$0** | $0 |
+| Reviews requiring human approval | 12/12 | n/a |
+
+Plus **6/6** model-path fixtures (stub transport: hallucinated quote, malformed
+JSON, HTTP 500 with retry, timeout, and a model overruled by policy) and **7/7**
+exception, integration and security fixtures.
+
+The baseline's action histogram is **9 advance / 2 reject / 1 hold**. With no
+policy layer, nearly everything becomes "advance" — which is precisely the
+failure Maya described.
+
+**The single alternate, stated plainly.** TC02 is a strong backend engineer with
+React explicitly absent. The gold label is `hold` (probe the gap); the system
+returns `reject`, because React is a hard must-have and the packet says "No
+frontend SPA work." Both are defensible; the system is stricter than the label.
+This is a configuration disagreement with a YAML lever, not a bug, and it is
+reported as `ALTERNATE` rather than quietly relabelled.
+
+## 9. Limitations
+
+1. **No live-model comparison.** The strongest baseline the brief asks for —
+   simple ChatGPT use — is implemented and unit-tested, but has never been run
+   against a real endpoint. Every published number is extractive-mode.
+2. **Synthetic packets, one role, English only.** Twelve cases, written by the
+   author. Indicator-based scoring misses synonyms absent from the YAML.
+3. **Timings are self-reported**, n=3, by a proxy rather than a real hiring manager.
+4. **No fairness or adverse-impact analysis.** This must not be presented as a
+   bias-audited tool.
+5. **No OCR.** Image-only PDFs are refused, not guessed at.
+6. **Single-operator security model.** Loopback plus an optional shared token.
+   No per-user accounts, no HTTPS, and the store records the decision but not who
+   made it.
+7. **DNS rebinding is not defeated.** The SSRF guard validates the resolved
+   address then requests by hostname. Documented in `net_guard.py`, accepted for a
+   loopback tool.
+8. **No production adoption data.** The two-week plan below is a plan. Nothing in
+   this document reports observed production telemetry.
+
+## 10. Next two weeks
+
+**Week 1 — adoption and truth-finding**
+
+- Shadow 10 real (redacted) packets beside Maya or a proxy, logging every
+  disagreement between her call and the system's
+- Run the LLM baseline against a live endpoint and publish the comparison, so the
+  headline stops resting on a deterministic stand-in
+- Measure: minutes per packet, override rate, false-advance incidents
+- Add synonyms to the YAML from observed misses, twice
+
+**Week 2 — product**
+
+- A second scorecard (Account Executive) to prove the YAML-not-code extension path
+- Greenhouse CSV *import* (still no write-back)
+- OCR fallback, labelled low-confidence
+- Record approver identity alongside the decision
+
+**Stop rule:** if the override rate on advances exceeds 30%, freeze features and
+fix the scorecard. A tool the reviewer routinely overrules is worse than no tool,
+because it manufactures false confidence.

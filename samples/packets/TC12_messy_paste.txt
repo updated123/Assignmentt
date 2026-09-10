@@ -1,0 +1,21 @@
+> Begin forwarded message
+> From: "Lina / Resume" <lina.vargas@example.com>
+> Subject: re: fullstack  pls find attached  thx
+
+LINA VARGAS
+lina.vargas@example.com
+FULL STACK SOFTWARE ENGINEER
+6 years of experience as a software engineer
+
+* python/fastapi  production payments api
+* react + typescript spa  customer dashboard  multi-tenant B2B SaaS
+* postgresql  sqlalchemy  migrations
+* pytest + github actions CI
+* weekly w/ product manager & designer, pull request code review
+* docker  aws
+
+messy paste from email + pdf export, unicode junk:  •••  experience
+Brightline  2020-present  shipped features every sprint
+also: jest tests on the frontend
+
+(this packet is intentionally noisy so the system must still find evidence)

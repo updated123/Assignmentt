@@ -1,0 +1,999 @@
+{
+  "generated_at": "2026-09-10T18:51:00Z",
+  "engine_mode": "grounded_extractive",
+  "system": {
+    "n": 12,
+    "exact": 11,
+    "alternate": 1,
+    "fail": 0,
+    "passed": 12,
+    "invariant_failures": [],
+    "latency_p50_ms": 1,
+    "latency_p95_ms": 23,
+    "action_histogram": {
+      "advance_to_screen": 3,
+      "reject_with_reason": 4,
+      "request_missing_info": 2,
+      "escalate_to_hiring_manager": 2,
+      "hold_for_specific_interview": 1
+    }
+  },
+  "baseline": {
+    "n": 12,
+    "exact": 3,
+    "alternate": 0,
+    "fail": 9,
+    "passed": 3,
+    "invariant_failures": [
+      "avoided_forbidden_action",
+      "frontend_gap",
+      "knockout_fired"
+    ],
+    "latency_p50_ms": 1,
+    "latency_p95_ms": 1,
+    "action_histogram": {
+      "advance_to_screen": 9,
+      "reject_with_reason": 2,
+      "hold_for_specific_interview": 1
+    }
+  },
+  "system_false_advances": [],
+  "baseline_false_advances": [
+    "TC02_backend_heavy",
+    "TC06_no_python",
+    "TC07_inflated_claims",
+    "TC10_timezone_conflict",
+    "TC11_toxic_conduct"
+  ],
+  "grounding_coverage": {
+    "system_scoring_criteria": 68,
+    "system_grounded_criteria": 68,
+    "system_pct": 100.0,
+    "baseline_pct": null,
+    "baseline_note": "Not scored. A single unstructured prompt cannot emit per-criterion quotes."
+  },
+  "human_approval": {
+    "reviews_requiring_approval": 12,
+    "drafts_auto_sendable": 0
+  },
+  "exception_pass": 7,
+  "exception_n": 7,
+  "llm_path_pass": 6,
+  "llm_path_n": 6,
+  "cases": [
+    {
+      "case_id": "TC01_strong_match",
+      "kind": "representative",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "advance_to_screen",
+      "allowed_actions": [
+        "advance_to_screen"
+      ],
+      "actual_action": "advance_to_screen",
+      "checks": {
+        "avoided_forbidden_action": true,
+        "detected_required_criteria": true,
+        "no_false_knockout": true,
+        "no_hallucinated_quotes": true,
+        "scores_are_grounded": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 8,
+        "grounded_criteria": 8,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 23,
+      "confidence": 0.8,
+      "overall_score": 1.0,
+      "engine_mode": "grounded_extractive",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Priya Nair: recommended advance to screen. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC02_backend_heavy",
+      "kind": "representative",
+      "outcome": "alternate",
+      "passed": true,
+      "expected_action": "hold_for_specific_interview",
+      "allowed_actions": [
+        "hold_for_specific_interview",
+        "reject_with_reason"
+      ],
+      "actual_action": "reject_with_reason",
+      "checks": {
+        "avoided_forbidden_action": true,
+        "detected_required_criteria": true,
+        "frontend_gap": true,
+        "no_hallucinated_quotes": true
+      },
+      "notes": [
+        "Defensible alternate: expected hold_for_specific_interview, returned reject_with_reason."
+      ],
+      "grounding": {
+        "scoring_criteria": 6,
+        "grounded_criteria": 6,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 3,
+      "confidence": 0.67,
+      "overall_score": 0.737,
+      "engine_mode": "grounded_extractive",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "James Okonkwo: recommended reject with a reason. Evidenced: 3+ years professional software engineering, Production Python backend experience. Gaps: Production React (or equivalent SPA) experience."
+    },
+    {
+      "case_id": "TC03_incomplete",
+      "kind": "edge",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "request_missing_info",
+      "allowed_actions": [
+        "request_missing_info"
+      ],
+      "actual_action": "request_missing_info",
+      "checks": {
+        "avoided_forbidden_action": true,
+        "no_hallucinated_quotes": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 0,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 2,
+      "confidence": 0.31,
+      "overall_score": 0.0,
+      "engine_mode": "grounded_extractive",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Alex Kim: recommended request missing information. Evidenced: none of the must-haves clearly. Gaps: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience."
+    },
+    {
+      "case_id": "TC04_wrong_role",
+      "kind": "failure",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "reject_with_reason",
+      "allowed_actions": [
+        "reject_with_reason"
+      ],
+      "actual_action": "reject_with_reason",
+      "checks": {
+        "avoided_forbidden_action": true,
+        "knockout_fired": true,
+        "no_hallucinated_quotes": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 4,
+        "grounded_criteria": 4,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.6,
+      "overall_score": 0.583,
+      "engine_mode": "grounded_extractive",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Riley Cho: recommended reject with a reason. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap. Knockout: Clearly a different discipline with no transferable product-engineering evidence."
+    },
+    {
+      "case_id": "TC05_overqualified_referral",
+      "kind": "edge",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "escalate_to_hiring_manager",
+      "allowed_actions": [
+        "escalate_to_hiring_manager"
+      ],
+      "actual_action": "escalate_to_hiring_manager",
+      "checks": {
+        "avoided_forbidden_action": true,
+        "no_hallucinated_quotes": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 7,
+        "grounded_criteria": 7,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.75,
+      "overall_score": 0.895,
+      "engine_mode": "grounded_extractive",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Samira Qureshi: recommended escalate to hiring manager. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC06_no_python",
+      "kind": "representative",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "reject_with_reason",
+      "allowed_actions": [
+        "reject_with_reason",
+        "request_missing_info"
+      ],
+      "actual_action": "reject_with_reason",
+      "checks": {
+        "avoided_forbidden_action": true,
+        "no_hallucinated_quotes": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 4,
+        "grounded_criteria": 4,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.57,
+      "overall_score": 0.526,
+      "engine_mode": "grounded_extractive",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Morgan Ellis: recommended reject with a reason. Evidenced: 3+ years professional software engineering, Production React (or equivalent SPA) experience. Gaps: Production Python backend experience."
+    },
+    {
+      "case_id": "TC07_inflated_claims",
+      "kind": "edge",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "request_missing_info",
+      "allowed_actions": [
+        "request_missing_info",
+        "reject_with_reason"
+      ],
+      "actual_action": "request_missing_info",
+      "checks": {
+        "avoided_forbidden_action": true,
+        "risk_flagged": true,
+        "no_hallucinated_quotes": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 5,
+        "grounded_criteria": 5,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.54,
+      "overall_score": 0.658,
+      "engine_mode": "grounded_extractive",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Unknown candidate: recommended request missing information. Evidenced: Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: 3+ years professional software engineering."
+    },
+    {
+      "case_id": "TC08_thin_referral",
+      "kind": "edge",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "escalate_to_hiring_manager",
+      "allowed_actions": [
+        "escalate_to_hiring_manager"
+      ],
+      "actual_action": "escalate_to_hiring_manager",
+      "checks": {
+        "no_hallucinated_quotes": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 3,
+        "grounded_criteria": 3,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.52,
+      "overall_score": 0.474,
+      "engine_mode": "grounded_extractive",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Dee Patel: recommended escalate to hiring manager. Evidenced: Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: 3+ years professional software engineering."
+    },
+    {
+      "case_id": "TC09_job_hopper",
+      "kind": "representative",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "advance_to_screen",
+      "allowed_actions": [
+        "advance_to_screen",
+        "hold_for_specific_interview"
+      ],
+      "actual_action": "advance_to_screen",
+      "checks": {
+        "detected_required_criteria": true,
+        "risk_flagged": true,
+        "no_hallucinated_quotes": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 8,
+        "grounded_criteria": 8,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 2,
+      "confidence": 0.8,
+      "overall_score": 1.0,
+      "engine_mode": "grounded_extractive",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Chris Alvarez: recommended advance to screen. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC10_timezone_conflict",
+      "kind": "edge",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "hold_for_specific_interview",
+      "allowed_actions": [
+        "hold_for_specific_interview",
+        "request_missing_info"
+      ],
+      "actual_action": "hold_for_specific_interview",
+      "checks": {
+        "avoided_forbidden_action": true,
+        "risk_flagged": true,
+        "no_hallucinated_quotes": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 8,
+        "grounded_criteria": 8,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 2,
+      "confidence": 0.8,
+      "overall_score": 1.0,
+      "engine_mode": "grounded_extractive",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Wei Tan: recommended hold for a targeted interview. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC11_toxic_conduct",
+      "kind": "failure",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "reject_with_reason",
+      "allowed_actions": [
+        "reject_with_reason"
+      ],
+      "actual_action": "reject_with_reason",
+      "checks": {
+        "avoided_forbidden_action": true,
+        "knockout_fired": true,
+        "no_hallucinated_quotes": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 7,
+        "grounded_criteria": 7,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.65,
+      "overall_score": 0.908,
+      "engine_mode": "grounded_extractive",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Taylor Brooks: recommended reject with a reason. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap. Knockout: Hostile, discriminatory, or abusive conduct in packet."
+    },
+    {
+      "case_id": "TC12_messy_paste",
+      "kind": "representative",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "advance_to_screen",
+      "allowed_actions": [
+        "advance_to_screen",
+        "hold_for_specific_interview"
+      ],
+      "actual_action": "advance_to_screen",
+      "checks": {
+        "detected_required_criteria": true,
+        "no_hallucinated_quotes": true,
+        "scores_are_grounded": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 8,
+        "grounded_criteria": 8,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 2,
+      "confidence": 0.8,
+      "overall_score": 1.0,
+      "engine_mode": "grounded_extractive",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "LINA VARGAS: recommended advance to screen. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    }
+  ],
+  "baseline_cases": [
+    {
+      "case_id": "TC01_strong_match",
+      "kind": "representative",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "advance_to_screen",
+      "allowed_actions": [
+        "advance_to_screen"
+      ],
+      "actual_action": "advance_to_screen",
+      "checks": {
+        "avoided_forbidden_action": true,
+        "detected_required_criteria": true,
+        "no_false_knockout": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 8,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [
+          "years_experience",
+          "python_backend",
+          "react_frontend",
+          "data_stores",
+          "testing_quality",
+          "cloud_devops",
+          "domain_saas",
+          "collaboration"
+        ],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.4,
+      "overall_score": 1.0,
+      "engine_mode": "baseline_ungrounded",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Priya Nair: recommended advance to screen. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC02_backend_heavy",
+      "kind": "representative",
+      "outcome": "fail",
+      "passed": false,
+      "expected_action": "hold_for_specific_interview",
+      "allowed_actions": [
+        "hold_for_specific_interview",
+        "reject_with_reason"
+      ],
+      "actual_action": "advance_to_screen",
+      "checks": {
+        "avoided_forbidden_action": false,
+        "detected_required_criteria": true,
+        "frontend_gap": false
+      },
+      "notes": [
+        "Returned forbidden action advance_to_screen.",
+        "Did not treat React as a gap.",
+        "Action advance_to_screen is outside the allowed set ['hold_for_specific_interview', 'reject_with_reason']."
+      ],
+      "grounding": {
+        "scoring_criteria": 7,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [
+          "years_experience",
+          "python_backend",
+          "react_frontend",
+          "data_stores",
+          "testing_quality",
+          "cloud_devops",
+          "domain_saas"
+        ],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.4,
+      "overall_score": 0.908,
+      "engine_mode": "baseline_ungrounded",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "James Okonkwo: recommended advance to screen. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC03_incomplete",
+      "kind": "edge",
+      "outcome": "fail",
+      "passed": false,
+      "expected_action": "request_missing_info",
+      "allowed_actions": [
+        "request_missing_info"
+      ],
+      "actual_action": "reject_with_reason",
+      "checks": {
+        "avoided_forbidden_action": true
+      },
+      "notes": [
+        "Action reject_with_reason is outside the allowed set ['request_missing_info']."
+      ],
+      "grounding": {
+        "scoring_criteria": 0,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.55,
+      "overall_score": 0.0,
+      "engine_mode": "baseline_ungrounded",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Alex Kim: recommended reject with a reason. Evidenced: none of the must-haves clearly. Gaps: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience."
+    },
+    {
+      "case_id": "TC04_wrong_role",
+      "kind": "failure",
+      "outcome": "fail",
+      "passed": false,
+      "expected_action": "reject_with_reason",
+      "allowed_actions": [
+        "reject_with_reason"
+      ],
+      "actual_action": "hold_for_specific_interview",
+      "checks": {
+        "avoided_forbidden_action": true,
+        "knockout_fired": false
+      },
+      "notes": [
+        "Missing knockout wrong_discipline.",
+        "Action hold_for_specific_interview is outside the allowed set ['reject_with_reason']."
+      ],
+      "grounding": {
+        "scoring_criteria": 4,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [
+          "years_experience",
+          "python_backend",
+          "react_frontend",
+          "testing_quality"
+        ],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.4,
+      "overall_score": 0.465,
+      "engine_mode": "baseline_ungrounded",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Riley Cho: recommended hold for a targeted interview. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC05_overqualified_referral",
+      "kind": "edge",
+      "outcome": "fail",
+      "passed": false,
+      "expected_action": "escalate_to_hiring_manager",
+      "allowed_actions": [
+        "escalate_to_hiring_manager"
+      ],
+      "actual_action": "advance_to_screen",
+      "checks": {
+        "avoided_forbidden_action": true
+      },
+      "notes": [
+        "Action advance_to_screen is outside the allowed set ['escalate_to_hiring_manager']."
+      ],
+      "grounding": {
+        "scoring_criteria": 7,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [
+          "years_experience",
+          "python_backend",
+          "react_frontend",
+          "data_stores",
+          "cloud_devops",
+          "domain_saas",
+          "collaboration"
+        ],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.4,
+      "overall_score": 0.724,
+      "engine_mode": "baseline_ungrounded",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Samira Qureshi: recommended advance to screen. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC06_no_python",
+      "kind": "representative",
+      "outcome": "fail",
+      "passed": false,
+      "expected_action": "reject_with_reason",
+      "allowed_actions": [
+        "reject_with_reason",
+        "request_missing_info"
+      ],
+      "actual_action": "advance_to_screen",
+      "checks": {
+        "avoided_forbidden_action": false
+      },
+      "notes": [
+        "Returned forbidden action advance_to_screen.",
+        "Action advance_to_screen is outside the allowed set ['reject_with_reason', 'request_missing_info']."
+      ],
+      "grounding": {
+        "scoring_criteria": 5,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [
+          "years_experience",
+          "python_backend",
+          "react_frontend",
+          "testing_quality",
+          "collaboration"
+        ],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.4,
+      "overall_score": 0.649,
+      "engine_mode": "baseline_ungrounded",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Morgan Ellis: recommended advance to screen. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC07_inflated_claims",
+      "kind": "edge",
+      "outcome": "fail",
+      "passed": false,
+      "expected_action": "request_missing_info",
+      "allowed_actions": [
+        "request_missing_info",
+        "reject_with_reason"
+      ],
+      "actual_action": "advance_to_screen",
+      "checks": {
+        "avoided_forbidden_action": false,
+        "risk_flagged": true
+      },
+      "notes": [
+        "Returned forbidden action advance_to_screen.",
+        "Action advance_to_screen is outside the allowed set ['request_missing_info', 'reject_with_reason']."
+      ],
+      "grounding": {
+        "scoring_criteria": 6,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [
+          "years_experience",
+          "python_backend",
+          "react_frontend",
+          "data_stores",
+          "cloud_devops",
+          "collaboration"
+        ],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.4,
+      "overall_score": 0.667,
+      "engine_mode": "baseline_ungrounded",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Unknown candidate: recommended advance to screen. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC08_thin_referral",
+      "kind": "edge",
+      "outcome": "fail",
+      "passed": false,
+      "expected_action": "escalate_to_hiring_manager",
+      "allowed_actions": [
+        "escalate_to_hiring_manager"
+      ],
+      "actual_action": "reject_with_reason",
+      "checks": {},
+      "notes": [
+        "Action reject_with_reason is outside the allowed set ['escalate_to_hiring_manager']."
+      ],
+      "grounding": {
+        "scoring_criteria": 4,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [
+          "years_experience",
+          "python_backend",
+          "react_frontend",
+          "data_stores"
+        ],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.4,
+      "overall_score": 0.421,
+      "engine_mode": "baseline_ungrounded",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Dee Patel: recommended reject with a reason. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC09_job_hopper",
+      "kind": "representative",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "advance_to_screen",
+      "allowed_actions": [
+        "advance_to_screen",
+        "hold_for_specific_interview"
+      ],
+      "actual_action": "advance_to_screen",
+      "checks": {
+        "detected_required_criteria": true,
+        "risk_flagged": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 8,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [
+          "years_experience",
+          "python_backend",
+          "react_frontend",
+          "data_stores",
+          "testing_quality",
+          "cloud_devops",
+          "domain_saas",
+          "collaboration"
+        ],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.4,
+      "overall_score": 0.904,
+      "engine_mode": "baseline_ungrounded",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Chris Alvarez: recommended advance to screen. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC10_timezone_conflict",
+      "kind": "edge",
+      "outcome": "fail",
+      "passed": false,
+      "expected_action": "hold_for_specific_interview",
+      "allowed_actions": [
+        "hold_for_specific_interview",
+        "request_missing_info"
+      ],
+      "actual_action": "advance_to_screen",
+      "checks": {
+        "avoided_forbidden_action": false,
+        "risk_flagged": true
+      },
+      "notes": [
+        "Returned forbidden action advance_to_screen.",
+        "Action advance_to_screen is outside the allowed set ['hold_for_specific_interview', 'request_missing_info']."
+      ],
+      "grounding": {
+        "scoring_criteria": 8,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [
+          "years_experience",
+          "python_backend",
+          "react_frontend",
+          "data_stores",
+          "testing_quality",
+          "cloud_devops",
+          "domain_saas",
+          "collaboration"
+        ],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.4,
+      "overall_score": 0.934,
+      "engine_mode": "baseline_ungrounded",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Wei Tan: recommended advance to screen. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC11_toxic_conduct",
+      "kind": "failure",
+      "outcome": "fail",
+      "passed": false,
+      "expected_action": "reject_with_reason",
+      "allowed_actions": [
+        "reject_with_reason"
+      ],
+      "actual_action": "advance_to_screen",
+      "checks": {
+        "avoided_forbidden_action": false,
+        "knockout_fired": false
+      },
+      "notes": [
+        "Returned forbidden action advance_to_screen.",
+        "Missing knockout hostile_conduct.",
+        "Action advance_to_screen is outside the allowed set ['reject_with_reason']."
+      ],
+      "grounding": {
+        "scoring_criteria": 7,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [
+          "years_experience",
+          "python_backend",
+          "react_frontend",
+          "data_stores",
+          "testing_quality",
+          "cloud_devops",
+          "domain_saas"
+        ],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.4,
+      "overall_score": 0.732,
+      "engine_mode": "baseline_ungrounded",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "Taylor Brooks: recommended advance to screen. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    },
+    {
+      "case_id": "TC12_messy_paste",
+      "kind": "representative",
+      "outcome": "exact",
+      "passed": true,
+      "expected_action": "advance_to_screen",
+      "allowed_actions": [
+        "advance_to_screen",
+        "hold_for_specific_interview"
+      ],
+      "actual_action": "advance_to_screen",
+      "checks": {
+        "detected_required_criteria": true
+      },
+      "notes": [],
+      "grounding": {
+        "scoring_criteria": 8,
+        "grounded_criteria": 0,
+        "ungrounded_ids": [
+          "years_experience",
+          "python_backend",
+          "react_frontend",
+          "data_stores",
+          "testing_quality",
+          "cloud_devops",
+          "domain_saas",
+          "collaboration"
+        ],
+        "hallucinated_ids": []
+      },
+      "latency_ms": 1,
+      "confidence": 0.4,
+      "overall_score": 1.0,
+      "engine_mode": "baseline_ungrounded",
+      "human_must_approve": true,
+      "draft_send_allowed": false,
+      "summary": "LINA VARGAS: recommended advance to screen. Evidenced: 3+ years professional software engineering, Production Python backend experience, Production React (or equivalent SPA) experience. Gaps: no must-have gap."
+    }
+  ],
+  "exceptions": [
+    {
+      "case_id": "FX01_too_short",
+      "kind": "exception",
+      "passed": true,
+      "notes": [
+        "Packet is too short (2 characters). Paste a resume, notes, or upload a PDF."
+      ]
+    },
+    {
+      "case_id": "FX02_bad_pdf",
+      "kind": "exception",
+      "passed": true,
+      "notes": [
+        "Could not read bad.pdf. Upload a text-based PDF or paste the resume."
+      ]
+    },
+    {
+      "case_id": "FX03_bad_job_url",
+      "kind": "exception",
+      "passed": true,
+      "notes": [
+        "Job URL must start with http:// or https://"
+      ]
+    },
+    {
+      "case_id": "FX04_pdf_text",
+      "kind": "integration",
+      "passed": true,
+      "notes": [
+        "Priya Nair\n5 years of experience as a software engineer\nPython FastAPI React TypeScript PostgreSQL pytest AWS\nShipped a B2B SaaS billing das"
+      ]
+    },
+    {
+      "case_id": "FX05_job_url_fetch",
+      "kind": "integration",
+      "passed": true,
+      "notes": [
+        "Mid-level Full-Stack Engineer \u2014 Northloop Mid-level Full-Stack Engineer Northloop is a 22-person B2B SaaS company. You will ship Python APIs"
+      ]
+    },
+    {
+      "case_id": "FX06_ssrf_loopback_blocked",
+      "kind": "security",
+      "passed": true,
+      "notes": [
+        "Loopback job URL refused unless allow_private is set."
+      ]
+    },
+    {
+      "case_id": "FX07_ssrf_metadata_blocked",
+      "kind": "security",
+      "passed": true,
+      "notes": [
+        "Refusing to fetch '169.254.169.254': it points at the private/internal address 169.254.169.254. Paste the job description text instead."
+      ]
+    }
+  ],
+  "llm_path": [
+    {
+      "case_id": "LX01_valid_json_merged",
+      "kind": "model-path",
+      "passed": true,
+      "notes": [
+        "engine=llm_judge, python_backend score=3"
+      ]
+    },
+    {
+      "case_id": "LX02_hallucinated_quote_dropped",
+      "kind": "model-path",
+      "passed": true,
+      "notes": [
+        "Dropped hallucinated quote on python_backend."
+      ]
+    },
+    {
+      "case_id": "LX03_malformed_json_fallback",
+      "kind": "model-path",
+      "passed": true,
+      "notes": [
+        "engine=llm_fallback_extractive, calls=2"
+      ]
+    },
+    {
+      "case_id": "LX04_http_500_retried_then_fallback",
+      "kind": "model-path",
+      "passed": true,
+      "notes": [
+        "attempts=2 (expected 2), engine=llm_fallback_extractive"
+      ]
+    },
+    {
+      "case_id": "LX05_timeout_fallback",
+      "kind": "model-path",
+      "passed": true,
+      "notes": [
+        "attempts=1 (expected 1), engine=llm_fallback_extractive"
+      ]
+    },
+    {
+      "case_id": "LX06_policy_overrides_model",
+      "kind": "model-path",
+      "passed": true,
+      "notes": [
+        "action=reject_with_reason, knockouts=['hostile_conduct']"
+      ]
+    }
+  ]
+}

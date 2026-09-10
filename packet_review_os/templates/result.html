@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Review {{ result.candidate_name }} · Packet Review OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <small>Northloop hiring desk</small>
+      Packet Review OS
+    </div>
+    <nav>
+      <a href="/">New review</a>
+      <a href="/history">History</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    <div class="head">
+      <div>
+        <div class="kicker">{{ result.company }} · {{ result.role_title }}</div>
+        <h2>{{ result.candidate_name }}</h2>
+        <p>{{ result.summary }}</p>
+      </div>
+      <div class="pills">
+        <span class="pill {{ result.next_action.value.split('_')[0] }}">{{ result.next_action_label }}</span>
+        <span class="pill {{ result.confidence_label }}">{{ result.confidence_label }} confidence · {{ result.confidence }}</span>
+        <span class="pill">overall {{ result.overall_score }}</span>
+      </div>
+    </div>
+
+    <div class="human">
+      <strong>Human decision required.</strong> {{ result.why_this_action }}
+      This tool does not email the candidate or update an ATS.
+    </div>
+
+    {% if result.exceptions %}
+    <div class="banner">{% for e in result.exceptions %}{{ e }}<br>{% endfor %}</div>
+    {% endif %}
+    {% if result.warnings %}
+    <div class="banner">{% for w in result.warnings %}{{ w }}<br>{% endfor %}</div>
+    {% endif %}
+
+    <div class="meta">
+      <div><span>Run</span>{{ result.run_id }}</div>
+      <div><span>Engine</span>{{ result.engine_mode.value }}</div>
+      <div><span>Latency</span>{{ result.latency_ms }} ms</div>
+      <div><span>Grounding</span>{% if result.llm_used %}LLM quotes checked{% else %}Extractive quotes only{% endif %}</div>
+    </div>
+
+    <div class="panel">
+      <h3>Scorecard with evidence</h3>
+      <table class="criteria">
+        <thead>
+          <tr><th>Criterion</th><th>Score</th><th>Evidence (verbatim)</th><th>Rationale</th></tr>
+        </thead>
+        <tbody>
+          {% for c in result.criteria %}
+          <tr>
+            <td>{{ c.label }}{% if c.must_have %} <em>· must-have</em>{% endif %}</td>
+            <td class="score">{{ c.score }}/{{ c.max_score }}</td>
+            <td class="quote">{% if c.evidence_quote %}“{{ c.evidence_quote }}”{% else %}— none found{% endif %}</td>
+            <td>{{ c.rationale }}{% if c.contrary_evidence %}<br><span class="quote">Contrary: “{{ c.contrary_evidence }}”</span>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if result.knockouts %}
+    <div class="panel" style="margin-top:16px">
+      <h3>Knockouts</h3>
+      <ul class="list">{% for k in result.knockouts %}<li>{{ k.label }} — <span class="quote">“{{ k.evidence_quote }}”</span></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+
+    {% if result.risk_flags %}
+    <div class="panel" style="margin-top:16px">
+      <h3>Risk flags</h3>
+      <ul class="list">{% for f in result.risk_flags %}<li>{{ f.label }} — <span class="quote">“{{ f.evidence_quote }}”</span></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+
+    {% if result.missing_fields %}
+    <div class="panel" style="margin-top:16px">
+      <h3>Missing information</h3>
+      <ul class="list">{% for m in result.missing_fields %}<li><strong>{{ m.field }}</strong>: {{ m.why_it_matters }} Ask: {{ m.ask_back_question }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+
+    {% if result.interview_probes %}
+    <div class="panel" style="margin-top:16px">
+      <h3>Interview probes</h3>
+      <ul class="list">{% for p in result.interview_probes %}<li>{{ p }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+
+    {% if result.draft_email %}
+    <div class="panel" style="margin-top:16px">
+      <h3>Draft (not sent)</h3>
+      <p class="hint">{{ result.draft_email.purpose }}</p>
+      <p><strong>{{ result.draft_email.subject }}</strong></p>
+      <div class="email">{{ result.draft_email.body }}</div>
+    </div>
+    {% endif %}
+
+    <form class="approve" method="post" action="/review/{{ result.run_id }}/decision">
+      <label for="note">Approval note</label>
+      <input id="note" type="text" name="note" placeholder="Why you agree or disagree">
+      <div class="actions">
+        <button name="approved" value="approve" type="submit">Approve this next action</button>
+        <button class="secondary" name="approved" value="reject" type="submit">Reject / send back</button>
+        <a class="btn secondary" href="/">Start another packet</a>
+      </div>
+      {% if approved is defined and approved is not none %}
+      <p class="hint">Recorded decision: {% if approved %}approved{% else %}sent back{% endif %}{% if approver_note %} — {{ approver_note }}{% endif %}</p>
+      {% endif %}
+    </form>
+
+    <p class="logs">
+      {% for line in result.logs %}{{ line }}<br>{% endfor %}
+    </p>
+  </main>
+</body>
+</html>

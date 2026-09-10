@@ -1,0 +1,24 @@
+FORWARDING EMAIL
+From: Jordan Hale <jordan@northloop.example>
+To: Maya Chen
+Subject: FW: Priya Nair — fullstack
+Priya, 5 years. Strong. Please scorecard this today.
+
+---
+Priya Nair
+priya.nair@example.com
+Full-Stack Engineer · Brooklyn, NY (ET)
+5 years of experience as a software engineer
+
+EXPERIENCE
+Northwind Analytics — Full-Stack Engineer (2021–present)
+- Shipped Python FastAPI services and a React/TypeScript dashboard for a B2B SaaS billing product.
+- PostgreSQL schema design, SQLAlchemy migrations, pytest coverage on payment webhooks.
+- Weekly collaboration with one product manager and a designer; code review on every pull request.
+- AWS (ECS + RDS), GitHub Actions CI/CD, Docker.
+
+BrightCart — Software Engineer (2019–2021)
+- Django storefront, React admin, mentored two juniors.
+
+SKILLS
+Python, FastAPI, Django, React, TypeScript, PostgreSQL, pytest, Jest, AWS, Docker

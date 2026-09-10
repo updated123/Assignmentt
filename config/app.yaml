@@ -1,0 +1,17 @@
+app_name: Packet Review OS
+version: 1.1.0
+default_role_id: fullstack_engineer
+min_packet_chars: 80
+max_packet_chars: 40000
+llm_timeout_seconds: 45
+llm_retries: 1
+human_approval_required: true
+retain_packets_in_db: true
+redact_emails_in_logs: true
+confidence:
+  high: 0.75
+  medium: 0.5
+action_policy:
+  advance_min_must_have_score: 2
+  advance_min_overall: 0.62
+  hold_min_overall: 0.45

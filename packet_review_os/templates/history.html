@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>History · Packet Review OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <small>Northloop hiring desk</small>
+      Packet Review OS
+    </div>
+    <nav>
+      <a href="/">New review</a>
+      <a href="/history">History</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    <h2>Review log</h2>
+    <p class="hint">Local SQLite only. Approvals are recorded here so an operator can audit exceptions.</p>
+    <table class="history">
+      <thead>
+        <tr><th>When</th><th>Candidate</th><th>Action</th><th>Conf.</th><th>Engine</th><th>Approved</th></tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td>{{ r.created_at.replace('T', ' ')[:19] }}</td>
+          <td><a href="/review/{{ r.run_id }}">{{ r.candidate_name }}</a></td>
+          <td>{{ r.next_action }}</td>
+          <td>{{ r.confidence }}</td>
+          <td>{{ r.engine_mode }}</td>
+          <td>{% if r.approved is none %}pending{% elif r.approved %}yes{% else %}sent back{% endif %}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No reviews yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

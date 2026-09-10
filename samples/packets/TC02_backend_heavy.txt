@@ -1,0 +1,16 @@
+Candidate: James Okonkwo
+Lagos / remote
+Years of experience: 6 years as a backend engineer
+
+Summary
+Backend-heavy profile. Strong Python/Django, Celery, PostgreSQL, pytest, AWS.
+Frontend is jQuery only on internal admin pages. Recruiter asked about React; candidate said “I can learn React, I am backend only right now.”
+
+BrightPath — Senior Backend Engineer (2020–present)
+- Django REST, Celery, PostgreSQL, production Python services for a B2B SaaS reporting product.
+- No frontend SPA work. jQuery only for a small admin.
+
+Helio — Software Engineer (2018–2020)
+- Flask APIs, unit tests, Docker.
+
+Notes: excellent communicator. Wants a full-stack title.

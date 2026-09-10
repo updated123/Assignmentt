@@ -1,0 +1,181 @@
+[
+  {
+    "id": "TC01_strong_match",
+    "file": "samples/packets/TC01_strong_match.txt",
+    "kind": "representative",
+    "expected_action": "advance_to_screen",
+    "allowed_actions": [
+      "advance_to_screen"
+    ],
+    "must_detect_criteria": [
+      "python_backend",
+      "react_frontend",
+      "years_experience"
+    ],
+    "must_not_action": [
+      "reject_with_reason"
+    ],
+    "require_evidence": true,
+    "forbid_knockout": true,
+    "notes": "Clear production Python + React + 5 years."
+  },
+  {
+    "id": "TC02_backend_heavy",
+    "file": "samples/packets/TC02_backend_heavy.txt",
+    "kind": "representative",
+    "expected_action": "hold_for_specific_interview",
+    "allowed_actions": [
+      "hold_for_specific_interview",
+      "reject_with_reason"
+    ],
+    "must_detect_criteria": [
+      "python_backend"
+    ],
+    "require_frontend_gap": true,
+    "notes": "Strong backend, React explicitly absent. Gold label is hold (probe the gap); reject is defensible because React is a hard must-have. Must not advance. The system currently rejects -- reported as ALTERNATE, see docs/EVALUATION.md.",
+    "must_not_action": [
+      "advance_to_screen"
+    ]
+  },
+  {
+    "id": "TC03_incomplete",
+    "file": "samples/packets/TC03_incomplete.txt",
+    "kind": "edge",
+    "expected_action": "request_missing_info",
+    "allowed_actions": [
+      "request_missing_info"
+    ],
+    "must_not_action": [
+      "advance_to_screen"
+    ],
+    "notes": "Thin LinkedIn dump, first-role signal."
+  },
+  {
+    "id": "TC04_wrong_role",
+    "file": "samples/packets/TC04_wrong_role.txt",
+    "kind": "failure",
+    "expected_action": "reject_with_reason",
+    "allowed_actions": [
+      "reject_with_reason"
+    ],
+    "require_knockout": "wrong_discipline",
+    "must_not_action": [
+      "advance_to_screen"
+    ],
+    "notes": "iOS/Swift only."
+  },
+  {
+    "id": "TC05_overqualified_referral",
+    "file": "samples/packets/TC05_overqualified_referral.txt",
+    "kind": "edge",
+    "expected_action": "escalate_to_hiring_manager",
+    "allowed_actions": [
+      "escalate_to_hiring_manager"
+    ],
+    "must_not_action": [
+      "reject_with_reason"
+    ],
+    "notes": "CEO referral + VP-level. Policy must escalate, not auto-close."
+  },
+  {
+    "id": "TC06_no_python",
+    "file": "samples/packets/TC06_no_python.txt",
+    "kind": "representative",
+    "expected_action": "reject_with_reason",
+    "allowed_actions": [
+      "reject_with_reason",
+      "request_missing_info"
+    ],
+    "must_not_action": [
+      "advance_to_screen"
+    ],
+    "notes": "React present, production Python explicitly absent."
+  },
+  {
+    "id": "TC07_inflated_claims",
+    "file": "samples/packets/TC07_inflated_claims.txt",
+    "kind": "edge",
+    "expected_action": "request_missing_info",
+    "allowed_actions": [
+      "request_missing_info",
+      "reject_with_reason"
+    ],
+    "must_not_action": [
+      "advance_to_screen"
+    ],
+    "require_risk": "inflated_claims",
+    "notes": "10x/ninja language, no artifacts."
+  },
+  {
+    "id": "TC08_thin_referral",
+    "file": "samples/packets/TC08_thin_referral.txt",
+    "kind": "edge",
+    "expected_action": "escalate_to_hiring_manager",
+    "allowed_actions": [
+      "escalate_to_hiring_manager"
+    ],
+    "notes": "Thin packet but CEO referral."
+  },
+  {
+    "id": "TC09_job_hopper",
+    "file": "samples/packets/TC09_job_hopper.txt",
+    "kind": "representative",
+    "expected_action": "advance_to_screen",
+    "allowed_actions": [
+      "advance_to_screen",
+      "hold_for_specific_interview"
+    ],
+    "require_risk": "job_hopping",
+    "must_detect_criteria": [
+      "python_backend",
+      "react_frontend"
+    ],
+    "notes": "Skills pass; tenure risk must be visible to the human."
+  },
+  {
+    "id": "TC10_timezone_conflict",
+    "file": "samples/packets/TC10_timezone_conflict.txt",
+    "kind": "edge",
+    "expected_action": "hold_for_specific_interview",
+    "allowed_actions": [
+      "hold_for_specific_interview",
+      "request_missing_info"
+    ],
+    "require_risk": "timezone_conflict",
+    "must_not_action": [
+      "advance_to_screen"
+    ],
+    "notes": "Skills good, overlap unresolved."
+  },
+  {
+    "id": "TC11_toxic_conduct",
+    "file": "samples/packets/TC11_toxic_conduct.txt",
+    "kind": "failure",
+    "expected_action": "reject_with_reason",
+    "allowed_actions": [
+      "reject_with_reason"
+    ],
+    "require_knockout": "hostile_conduct",
+    "must_not_action": [
+      "advance_to_screen"
+    ],
+    "notes": "Skills must not override a conduct knockout."
+  },
+  {
+    "id": "TC12_messy_paste",
+    "file": "samples/packets/TC12_messy_paste.txt",
+    "kind": "representative",
+    "expected_action": "advance_to_screen",
+    "allowed_actions": [
+      "advance_to_screen",
+      "hold_for_specific_interview"
+    ],
+    "must_detect_criteria": [
+      "python_backend",
+      "react_frontend",
+      "years_experience"
+    ],
+    "require_evidence": true,
+    "notes": "Noisy email forward of a strong packet."
+  }
+]

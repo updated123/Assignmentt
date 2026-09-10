@@ -1,0 +1,66 @@
+name: CI
+
+# Three gates, in the order that fails fastest:
+#   1. lint      - ruff, the same rules a contributor runs locally
+#   2. tests     - the unit/integration suite, with a coverage floor
+#   3. evaluation- the gold set, model-path fixtures and security fixtures.
+#                  `python -m packet_review_os eval` exits non-zero if any case
+#                  lands outside its allowed action set or any invariant breaks,
+#                  so a regression in review quality fails the build, not just a
+#                  regression in code.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Validate the shipped configuration
+        run: python -m packet_review_os check
+
+      - name: Tests
+        run: pytest -q --cov=packet_review_os --cov-report=term --cov-fail-under=85
+
+      # Checked before the eval gate: this compares the committed submit/ bundle
+      # against the committed docs/ and results, which is the actual invariant.
+      # Running it afterwards would always fail on the regenerated timestamp.
+      - name: Submission bundle is in sync with docs/
+        run: python scripts/build_submission.py --check
+
+      - name: Evaluation gate
+        run: python -m packet_review_os eval
+
+      - name: Upload evaluation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-report-py${{ matrix.python-version }}
+          path: evaluation/results/
+          if-no-files-found: warn

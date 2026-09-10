@@ -1,0 +1,8 @@
+Morgan Ellis
+Frontend Engineer
+4 years of experience as a software engineer
+
+React, TypeScript, Next.js, Jest, Cypress, product designer collaboration, pull requests, agile sprints.
+Node.js APIs only. Explicit note: “no backend Python. I have never written production Python.”
+
+Good UI craft. Wrong backend must-have.

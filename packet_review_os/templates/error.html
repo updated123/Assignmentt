@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Packet Review OS — something needs attention</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <small>Northloop hiring desk</small>
+      Packet Review OS
+    </div>
+    <nav>
+      <a href="/">New review</a>
+      <a href="/history">History</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    <section class="hero">
+      <h2>{{ status_code }} — this did not complete</h2>
+      <p>No review was saved and nothing was sent. Details below.</p>
+    </section>
+    <div class="banner">{{ message }}</div>
+    {% if hint %}
+    <div class="panel">
+      <h3>What to do next</h3>
+      <p>{{ hint }}</p>
+    </div>
+    {% endif %}
+    <div class="panel">
+      <h3>If this keeps happening</h3>
+      <p>
+        Run <code>python -m packet_review_os check</code> in the project folder. It validates the
+        configuration and prints the exact file and field to fix. The operator runbook covers the
+        common cases: <code>docs/RUNBOOK.md</code>.
+      </p>
+      <div class="actions">
+        <a class="btn" href="/">Back to a new review</a>
+      </div>
+    </div>
+    <p class="footer">Packet Review OS v{{ version }}</p>
+  </main>
+</body>
+</html>

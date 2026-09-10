@@ -1,0 +1,7 @@
+-r requirements.txt
+
+# Dev/test tooling. Runtime deps stay exactly pinned in requirements.txt;
+# these use floors so they track security fixes without breaking the app.
+pytest>=8.3
+respx>=0.22
+ruff>=0.9

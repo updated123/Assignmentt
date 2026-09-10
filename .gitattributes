@@ -1,0 +1,13 @@
+# Normalise text to LF in the repository, whatever the contributor's platform.
+* text=auto eol=lf
+
+# The sample resume is a byte-exact PDF: its cross-reference table stores
+# absolute byte offsets. Letting git rewrite its line endings shifts every
+# offset and corrupts the file on checkout, which breaks the PDF fixture and
+# the demo for anyone who clones on Windows. Keep it binary.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.ico binary
+*.db binary
+*.sqlite3 binary

@@ -1,0 +1,9 @@
+Riley Cho
+iOS Engineer
+8 years of experience, Swift only, iOS only
+No web experience.
+
+Apple contractor → Fintech iOS → Health iOS
+UIKit, SwiftUI, Combine. Pure mobile. Recruiter submitted by mistake to the web full-stack req.
+
+“I do not write Python or React. I am an iOS only specialist.”

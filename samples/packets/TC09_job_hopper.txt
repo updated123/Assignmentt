@@ -1,0 +1,12 @@
+Chris Alvarez
+Full-stack · 4 years of experience as a software engineer
+
+Jan 2024–Mar 2024  Helix  Software Engineer  Python FastAPI React PostgreSQL  (3 months, contract ended in)
+Apr 2024–Jun 2024  Orbit  Full stack  Django React  (2 months)
+Jul 2024–Sep 2024  Nimbus  React TypeScript pytest AWS
+Oct 2024–Dec 2024  Quay  Python React B2B SaaS dashboard
+Jan 2025–Mar 2025  Vale  full-stack
+Apr 2025–present   Copper  FastAPI + React  (3 months)
+
+Skills are real: Python, FastAPI, React, TypeScript, PostgreSQL, pytest, AWS, pull request reviews.
+Tenure pattern is very short without explanation.

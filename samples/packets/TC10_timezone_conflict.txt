@@ -1,0 +1,7 @@
+Wei Tan
+Singapore · GMT+8
+5 years of experience as a software engineer
+Python FastAPI, React, TypeScript, PostgreSQL, pytest, Docker, B2B SaaS billing dashboard.
+Collaborated with product manager and designer. Code review on pull requests.
+
+Availability: asynchronous only, no overlap with US Eastern. “I work Singapore hours, GMT+8, and cannot join ET mornings.”
