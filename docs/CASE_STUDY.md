@@ -237,17 +237,23 @@ reported as `ALTERNATE` rather than quietly relabelled.
    against a real endpoint. Every published number is extractive-mode.
 2. **Synthetic packets, one role, English only.** Twelve cases, written by the
    author. Indicator-based scoring misses synonyms absent from the YAML.
-3. **Timings are self-reported**, n=3, by a proxy rather than a real hiring manager.
-4. **No fairness or adverse-impact analysis.** This must not be presented as a
+3. **The seniority bar is one unvalidated number.** Escalation now triggers at
+   `overqualified_min_years` (12) rather than the literal string `"18 years"`,
+   which only matched the one packet that happened to say 18 — but 12 itself is a
+   judgment call tuned against a set whose next-highest packet says 8, not a
+   figure derived from real reqs. The seniority *titles* are still a hardcoded
+   vocabulary list in `policy.py`, so "Distinguished Engineer" does not trigger it.
+4. **Timings are self-reported**, n=3, by a proxy rather than a real hiring manager.
+5. **No fairness or adverse-impact analysis.** This must not be presented as a
    bias-audited tool.
-5. **No OCR.** Image-only PDFs are refused, not guessed at.
-6. **Single-operator security model.** Loopback plus an optional shared token.
+6. **No OCR.** Image-only PDFs are refused, not guessed at.
+7. **Single-operator security model.** Loopback plus an optional shared token.
    No per-user accounts, no HTTPS, and the store records the decision but not who
    made it.
-7. **DNS rebinding is not defeated.** The SSRF guard validates the resolved
+8. **DNS rebinding is not defeated.** The SSRF guard validates the resolved
    address then requests by hostname. Documented in `net_guard.py`, accepted for a
    loopback tool.
-8. **No production adoption data.** The two-week plan below is a plan. Nothing in
+9. **No production adoption data.** The two-week plan below is a plan. Nothing in
    this document reports observed production telemetry.
 
 ## 10. Next two weeks

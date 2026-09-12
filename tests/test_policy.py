@@ -85,6 +85,29 @@ def test_overqualified_signal_escalates():
     assert "level" in why.lower() or "band" in why.lower()
 
 
+def test_seniority_escalates_on_a_years_count_alone():
+    """The bar is a number, not the wording of the one packet we had.
+
+    This previously matched the literal string "18 years", so a 20-year
+    candidate with no VP in their title was screened against a mid-level
+    scorecard instead of being escalated.
+    """
+    action, _, overrode = _decide(
+        criteria=[_crit("python_backend", 3)],
+        packet="Independent consultant, 20 years building distributed systems. " + "x" * 900,
+    )
+    assert action is NextAction.ESCALATE_TO_HIRING_MANAGER
+    assert overrode is True
+
+
+def test_a_mid_level_years_count_does_not_escalate():
+    action, _, _ = _decide(
+        criteria=[_crit("python_backend", 3)],
+        packet="Full-stack engineer, 5 years shipping product. " + "x" * 900,
+    )
+    assert action is not NextAction.ESCALATE_TO_HIRING_MANAGER
+
+
 def test_wrong_discipline_knockout_rejects():
     action, _, _ = _decide(
         criteria=[_crit("python_backend", 0, contrary="ios only")],

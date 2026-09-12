@@ -121,8 +121,15 @@ def decide_action(
         token in notes_l
         for token in ["referral", "referred by", "ceo asked", "founder asked", "internal rec", "board member"]
     )
-    overqualified = any(
-        token in notes_l for token in ["vp engineering", "vice president", "head of engineering", "18 years"]
+    # Seniority shows up either as a title or as a years count. The title list is
+    # vocabulary and stays here; the years bar is a configured number, because
+    # "18 years" as a literal only caught the one packet that happened to say 18.
+    senior_title = any(
+        token in notes_l for token in ["vp engineering", "vice president", "head of engineering"]
+    )
+    stated_years = years_mentioned(notes)
+    overqualified = senior_title or (
+        stated_years is not None and stated_years >= cfg.overqualified_min_years
     )
 
     if any(k.id == "hostile_conduct" for k in knockouts) and not is_referral:

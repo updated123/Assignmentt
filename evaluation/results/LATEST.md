@@ -1,6 +1,6 @@
 # Evaluation results
 
-Generated: 2026-09-10T18:51:00Z · engine: `grounded_extractive`
+Generated: 2026-09-12T18:31:19Z · engine: `grounded_extractive`
 
 ## Headline
 
@@ -12,7 +12,7 @@ Generated: 2026-09-10T18:51:00Z · engine: `grounded_extractive`
 | Cases passing every invariant | **12/12** | 3/12 |
 | False advances on must-not-advance cases | **0** | 5 |
 | Scores backed by a verbatim quote | **100.0%** (68/68) | not available |
-| Latency p50 / p95 | 1 ms / 23 ms | 1 ms / 1 ms |
+| Latency p50 / p95 | 2 ms / 29 ms | 1 ms / 1 ms |
 
 - Baseline false advances: ['TC02_backend_heavy', 'TC06_no_python', 'TC07_inflated_claims', 'TC10_timezone_conflict', 'TC11_toxic_conduct']
 - System false advances: none

@@ -15,3 +15,6 @@ action_policy:
   advance_min_must_have_score: 2
   advance_min_overall: 0.62
   hold_min_overall: 0.45
+  # Escalate to a hiring manager at or above this many years, rather than
+  # screening a much more senior candidate against a mid-level scorecard.
+  overqualified_min_years: 12

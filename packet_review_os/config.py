@@ -93,6 +93,11 @@ class ActionPolicy(BaseModel):
     advance_min_must_have_score: int = Field(default=2, ge=0, le=3)
     advance_min_overall: float = Field(default=0.62, ge=0.0, le=1.0)
     hold_min_overall: float = Field(default=0.45, ge=0.0, le=1.0)
+    # Years of experience at which a packet is too senior to screen against a
+    # mid-level req without a human confirming level and band. A number, not a
+    # list of phrases, so it generalises past the seniority wording we happened
+    # to have seen.
+    overqualified_min_years: float = Field(default=12.0, ge=4.0, le=40.0)
 
 
 class AppConfig(BaseModel):
