@@ -54,8 +54,9 @@ macOS/Linux: `cp .env.example .env`
 python -m packet_review_os serve
 ```
 
-Paste the contents of `samples/packets/TC01_strong_match.txt` and click **Run
-scorecard review**. Then approve or send back. Nothing is emailed.
+Pick `TC01_strong_match` from **Try a bundled example**, click **Load example**,
+then **Run scorecard review**. Then approve or send back. Nothing is emailed.
+(You can also paste any packet by hand; the examples live in `samples/packets/`.)
 
 ## Verify it end to end
 

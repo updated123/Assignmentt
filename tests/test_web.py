@@ -170,6 +170,41 @@ def test_api_rejects_a_malformed_body(client):
 
 
 # --------------------------------------------------------------------------- #
+# Bundled examples, so a first-time reviewer never has to copy a file by hand
+# --------------------------------------------------------------------------- #
+
+
+def test_form_offers_the_bundled_examples(client):
+    body = client.get("/").text
+    assert "Load example" in body
+    assert "TC01_strong_match" in body
+
+
+def test_an_example_loads_in_full(client):
+    payload = client.get("/samples/TC01_strong_match").json()
+    assert payload["name"] == "TC01_strong_match"
+    assert "Priya Nair" in payload["text"]
+    # The failure this endpoint exists to prevent: a packet short enough to be
+    # rejected as empty rather than scored.
+    assert len(payload["text"]) > 800
+
+
+def test_a_loaded_example_scores_as_a_real_packet(client):
+    text = client.get("/samples/TC01_strong_match").json()["text"]
+    response = client.post("/review", data={"role_id": "fullstack_engineer", "packet_text": text})
+    assert "Advance to screen" in response.text
+
+
+def test_unknown_example_is_a_clean_404(client):
+    assert client.get("/samples/nope").status_code == 404
+
+
+@pytest.mark.parametrize("name", ["../../.env", "..%2f..%2f.env", "../config/app"])
+def test_examples_cannot_walk_out_of_the_samples_directory(client, name):
+    assert client.get(f"/samples/{name}").status_code in {307, 404}
+
+
+# --------------------------------------------------------------------------- #
 # Access control, which matters only when the app is not on loopback
 # --------------------------------------------------------------------------- #
 

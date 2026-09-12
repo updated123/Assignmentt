@@ -31,7 +31,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.concurrency import run_in_threadpool
 
-from .config import ConfigError, app_config, list_roles, settings, validate_all
+from .config import ROOT, ConfigError, app_config, list_roles, settings, validate_all
 from .pdf_extract import PdfExtractError, extract_pdf_text
 from .pipeline import run_review, safe_log_packet
 from .schemas import PacketInput, ReviewResult
@@ -43,6 +43,14 @@ templates = Jinja2Templates(directory=str(PACKAGE / "templates"))
 
 UPLOAD_CHUNK = 64 * 1024
 TOKEN_COOKIE = "prs_token"  # noqa: S105 - cookie name, not a credential
+SAMPLE_DIR = ROOT / "samples" / "packets"
+
+
+def sample_names() -> list[str]:
+    """Names of the bundled example packets, for the form's example picker."""
+    if not SAMPLE_DIR.is_dir():
+        return []
+    return sorted(path.stem for path in SAMPLE_DIR.glob("*.txt"))
 
 
 @asynccontextmanager
@@ -98,6 +106,7 @@ def _context(request: Request, **extra) -> dict:
         "request": request,
         "roles": list_roles(),
         "llm_on": settings().llm_enabled,
+        "samples": sample_names(),
         "version": app_config().version,
     }
     ctx.update(extra)
@@ -253,6 +262,21 @@ def review_detail(request: Request, run_id: str, _: None = Depends(require_acces
             approver_note=data.get("approver_note") or "",
         ),
     )
+
+
+@app.get("/samples/{name}")
+def sample_packet(name: str, _: None = Depends(require_access)):
+    """Load one bundled example into the form.
+
+    A reviewer trying the tool for the first time should not have to find a file
+    on disk and copy it correctly -- a partial paste scores as an empty packet
+    and looks like a broken tool. The name is checked against the directory
+    listing rather than joined onto a path, so no request can walk out of
+    ``samples/packets/``.
+    """
+    if name not in sample_names():
+        raise HTTPException(status_code=404, detail=f"No example packet named {name!r}.")
+    return {"name": name, "text": (SAMPLE_DIR / f"{name}.txt").read_text(encoding="utf-8")}
 
 
 @app.get("/history", response_class=HTMLResponse)

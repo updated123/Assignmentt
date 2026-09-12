@@ -27,6 +27,19 @@
     {% if error %}<div class="banner">{{ error }}</div>{% endif %}
     <form class="panel grid" action="/review" method="post" enctype="multipart/form-data">
       <div>
+        {% if samples %}
+        <label for="sample_name">Try a bundled example</label>
+        <div class="row">
+          <select id="sample_name">
+            <option value="">Choose an example packet…</option>
+            {% for name in samples %}
+            <option value="{{ name }}">{{ name }}</option>
+            {% endfor %}
+          </select>
+          <button type="button" class="secondary" id="load_sample">Load example</button>
+        </div>
+        <p class="hint" id="sample_status">Loads a full example packet into the box below, so nothing gets cut off by a partial copy.</p>
+        {% endif %}
         <label for="packet_text">Packet text</label>
         <textarea id="packet_text" name="packet_text" placeholder="Paste the resume, LinkedIn dump, forwarding email, or all of them mixed together."></textarea>
         <label for="pdf">Or upload a resume PDF</label>
@@ -60,5 +73,39 @@
     </form>
     <p class="footer">Operator runbook: docs/RUNBOOK.md · Three-step setup is in the README.</p>
   </main>
+  <script>
+    // Progressive enhancement only: without JS the form still works by pasting.
+    (function () {
+      var picker = document.getElementById("sample_name");
+      var button = document.getElementById("load_sample");
+      var status = document.getElementById("sample_status");
+      if (!picker || !button) return;
+      button.addEventListener("click", function () {
+        var name = picker.value;
+        if (!name) {
+          status.textContent = "Pick an example from the list first.";
+          return;
+        }
+        button.disabled = true;
+        status.textContent = "Loading " + name + "…";
+        fetch("/samples/" + encodeURIComponent(name))
+          .then(function (response) {
+            if (!response.ok) throw new Error("Could not load " + name + " (HTTP " + response.status + ").");
+            return response.json();
+          })
+          .then(function (data) {
+            document.getElementById("packet_text").value = data.text;
+            document.getElementById("candidate_name").value = "";
+            status.textContent = "Loaded " + name + " — " + data.text.length + " characters. Run the review.";
+          })
+          .catch(function (error) {
+            status.textContent = error.message + " Open samples/packets/ and paste the file instead.";
+          })
+          .finally(function () {
+            button.disabled = false;
+          });
+      });
+    })();
+  </script>
 </body>
 </html>
